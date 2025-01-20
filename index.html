@@ -95,6 +95,7 @@
       // Convert the term to months if necessary
       const totalMonths = isTermInMonths ? term : Math.ceil(term / 30);
       let currentAmount = initialAmount;
+      let totalAccruedInterest = 0; // Track total accrued interest when capitalization is disabled
       const results = []; // Store results for each month
 
       // Set the current date to the start date
@@ -113,9 +114,12 @@
         const accruedInterest =
           currentAmount * (annualRate / 100) * (daysInMonth / daysInYear);
 
-        // Update the total amount if capitalization is enabled
         if (capitalization) {
+          // Update the total amount if capitalization is enabled
           currentAmount += accruedInterest;
+        } else {
+          // Accumulate interest separately if capitalization is disabled
+          totalAccruedInterest += accruedInterest;
         }
 
         // Add the result for the current month to the results array
@@ -127,6 +131,11 @@
 
         // Move to the next month
         currentDate.setMonth(currentDate.getMonth() + 1);
+      }
+
+      // If capitalization is disabled, add total accrued interest to the initial amount
+      if (!capitalization) {
+        currentAmount = initialAmount + totalAccruedInterest;
       }
 
       // Calculate the real yield and annualized yield
