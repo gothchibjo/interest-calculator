@@ -138,12 +138,16 @@
         currentAmount = initialAmount + totalAccruedInterest;
       }
 
-      // Calculate the real yield and annualized yield
+      // Calculate the real yield
       const realYield = ((currentAmount - initialAmount) / initialAmount) * 100;
+
+      // Calculate the annual yield
       const totalPeriodInYears = totalMonths / 12;
-      const annualYield =
-        (Math.pow(currentAmount / initialAmount, 1 / totalPeriodInYears) - 1) *
-        100;
+      const annualYield = capitalization
+        ? (Math.pow(currentAmount / initialAmount, 1 / totalPeriodInYears) - 1) * 100
+        : (totalAccruedInterest / initialAmount / totalPeriodInYears) * 100;
+
+      // Total earned amount
       const earned = currentAmount - initialAmount;
 
       return {
