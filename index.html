@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deposit Calculator</title>
+  <title>Interest Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -28,12 +28,12 @@
   </style>
 </head>
 <body>
-  <h1>Deposit Calculator</h1>
+  <h1>Interest Calculator</h1>
 
   <form id="depositForm">
     <!-- Input for the initial deposit amount -->
     <label>
-      Initial Amount (₽):
+      Initial Amount:
       <input type="number" id="initialAmount" value="300000" required>
     </label>
     <br>
@@ -72,8 +72,8 @@
       <thead>
         <tr>
           <th>Month</th>
-          <th>Accrued Interest (₽)</th>
-          <th>Total Amount (₽)</th>
+          <th>Accrued Interest</th>
+          <th>Total Amount</th>
         </tr>
       </thead>
       <tbody id="resultsTable"></tbody>
@@ -138,16 +138,12 @@
         currentAmount = initialAmount + totalAccruedInterest;
       }
 
-      // Calculate the real yield
+      // Calculate the real yield and annualized yield
       const realYield = ((currentAmount - initialAmount) / initialAmount) * 100;
-
-      // Calculate the annual yield
       const totalPeriodInYears = totalMonths / 12;
-      const annualYield = capitalization
-        ? (Math.pow(currentAmount / initialAmount, 1 / totalPeriodInYears) - 1) * 100
-        : (totalAccruedInterest / initialAmount / totalPeriodInYears) * 100;
-
-      // Total earned amount
+      const annualYield =
+        (Math.pow(currentAmount / initialAmount, 1 / totalPeriodInYears) - 1) *
+        100;
       const earned = currentAmount - initialAmount;
 
       return {
@@ -192,15 +188,15 @@
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${month}</td>
-          <td>${accruedInterest}</td>
-          <td>${totalAmount}</td>
+          <td>${accruedInterest.toFixed(2)}</td>
+          <td>${totalAmount.toFixed(2)}</td>
         `;
         resultsTable.appendChild(row);
       });
 
       // Display summary of results below the table
       document.getElementById("summary").textContent =
-        `Real yield: ${realYield}% (${annualYield}% annual), Earned: ${earned}₽`;
+        `Real yield: ${realYield.toFixed(2)}% (${annualYield.toFixed(2)}% annual), Earned: ${earned.toFixed(2)}`;
 
       // Make the results container visible
       document.getElementById("resultsContainer").style.display = "block";
